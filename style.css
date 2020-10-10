@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+body {
+    margin-top: 100px;
+    width: 30vw;
+    height: 75vh;
+    
+}
+
+#calculator {
+    background-color: grey;
+    border: 5px solid black;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-areas: 
+    "screen screen screen screen"
+    "ac signchange percent divide"
+    "seven eight nine mult"
+    "four five six minus"
+    "one two three plus"
+    "zero zero dot enter";
+}
+
+#calculator > div {
+    border: 1px solid black;
+    background-color:rgba(255, 0, 0, 0.5);
+    font-size: 70px;
+    margin: 2px;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 8px;
+}
+
+
+
+#calculator > #screen {
+    grid-area: screen;
+    background-color: #fff;
+}
+
+#calculator > div.button {
+    background-color: rgba(0, 0, 255, 0.5);
+}
+
+#calculator > div.button:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+#calculator > div.btn_operation {
+    background-color: rgba(0, 255, 0, 0.5);
+}
+
+#btn_0 {
+    grid-area: zero;
+}
+
+#btn_1 {
+    grid-area: one;
+}
+
+#btn_2 {
+    grid-area: two;
+}
+
+#btn3 {
+    grid-area: three;
+}
+
+#btn_4 {
+    grid-area: four;
+}
+
+#btn_5 {
+    grid-area: five;
+}
+
+#btn_6 {
+    grid-area: six;
+}
+
+#btn_7 {
+    grid-area: seven;
+}
+
+#btn_8 {
+    grid-area: eight;
+}
+
+#btn_9 {
+    grid-area: nine;
+}
+
+#btn_plus {
+    grid-area: plus;
+}
+
+#btn_minus {
+    grid-area: minus;
+}
+
+#btn_mult {
+    grid-area: mult;
+}
+
+#btn_divide {
+    grid-area: divide;
+}
+
+#calculator > #btn_enter {
+    grid-area: enter;
+    background-color: red;
+}
+
+#btn_AC {
+    grid-area: ac;
+}
+
+#btn_percent {
+    grid-area: percent;
+}
+
+#btn_signchange {
+    grid-area: signchange;
+}
+
+#btn_dot {
+    grid-area: dot;
+}
