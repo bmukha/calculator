@@ -1,6 +1,14 @@
+
+@font-face {
+    font-family: "digital7";
+    src: url("./fonts/digital-7.ttf");
+}
+
+
 * {
     box-sizing: border-box;
     margin: 0 auto;
+    font-family: digital7;
 }
 
 body {
@@ -123,15 +131,18 @@ body {
     background-color: red;
 }
 
-#btn_AC {
+#calculator > #btn_C {
+    background-color: rgba(0, 255, 0, 0.5);
     grid-area: ac;
 }
 
-#btn_back {
+#calculator > #btn_back {
+    background-color: rgba(0, 255, 0, 0.5);
     grid-area: back;
 }
 
-#btn_signchange {
+#calculator > #btn_signchange {
+    background-color: rgba(0, 255, 0, 0.5);
     grid-area: signchange;
 }
 

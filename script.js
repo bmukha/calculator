@@ -1,129 +1,126 @@
-let displayValue = [];
-let state = "start";
-let firstOperand = "";
-let operation = "";
-let secondOperand = "";
 const calculator = document.querySelector("#calculator");
 const screen = document.querySelector("#screen");
-calculator.addEventListener("click", (e) => {
-  if (e.target.classList.contains("btn_digits")) {
-    if (state === "start") {
-      updateScreen(e.target.textContent);
-    }
-    if (state === "operationChosen") {
-      displayValue = [];
-      state = "secondOperandStarted";
-      updateScreen(e.target.textContent);
-      return;
-    }
+const digitButtons = document.querySelectorAll(".btn_digits");
+const operations = document.querySelectorAll(".btn_operation");
+const back = document.querySelector("#btn_back");
+const enter = document.querySelector("#btn_enter");
+const clear = document.querySelector("#btn_C");
+const signchange = document.querySelector("#btn_signchange");
 
-    if (state === "secondOperandStarted") {
-      updateScreen(e.target.textContent);
-    }
-  }
-  if (e.target.classList.contains("btn_operation")) {
-    if (state === "start") {
-      firstOperand = screen.textContent;
-      switch (e.target.textContent) {
-        case "+":
-          operation = add;
-          break;
-        case "-":
-          operation = sub;
-          break;
-        case "*":
-          operation = mult;
-          break;
-        case "/":
-          operation = div;
-          break;
+screen.textContent = "0";
+let arrOfSteps = [];
+
+digitButtons.forEach((button) =>
+  button.addEventListener("click", () => {
+    if (arrOfSteps.length === 0) {
+      arrOfSteps.push(button.textContent);
+      screen.textContent = arrOfSteps[0];
+    } else if (arrOfSteps.length === 1) {
+      if (arrOfSteps[0] && arrOfSteps[0].includes(".") && button.textContent === ".") {
+        return;
       }
-      state = "operationChosen";
-    }
-    if (state === "secondOperandStarted") {
-      secondOperand = screen.textContent;
-      let result =
-        "" +
-        operate(
-          Number.parseFloat(firstOperand),
-          Number.parseFloat(secondOperand),
-          operation
-        );
-      screen.textContent = result;
-      firstOperand = Number.parseFloat(screen.textContent);
-      secondOperand = "";
-      displayValue = [];
-      switch (e.target.textContent) {
-        case "+":
-          operation = add;
-          break;
-        case "-":
-          operation = sub;
-          break;
-        case "*":
-          operation = mult;
-          break;
-        case "/":
-          operation = div;
-          break;
+      arrOfSteps[0] += button.textContent;
+      screen.textContent = arrOfSteps[0];
+    } else if (arrOfSteps.length === 2) {
+      arrOfSteps.push(button.textContent);
+      screen.textContent = arrOfSteps[2];
+    } else if (arrOfSteps.length === 3) {
+      if (arrOfSteps[2] && arrOfSteps[2].includes(".") && button.textContent === ".") {
+        return;
       }
-      state = "operationChosen";
+      arrOfSteps[2] += button.textContent;
+      screen.textContent = arrOfSteps[2];
     }
+    console.log(arrOfSteps);
+  })
+);
+
+operations.forEach((button) =>
+  button.addEventListener("click", () => {
+    if (arrOfSteps.length === 0) {
+      arrOfSteps.push("0", chooseOperation(button));
+    } else if (arrOfSteps.length === 1) {
+      arrOfSteps.push(chooseOperation(button));
+    } else if (arrOfSteps.length === 2) {
+      arrOfSteps[1] = chooseOperation(button);
+    } else if (arrOfSteps.length === 3) {
+      let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
+      arrOfSteps = [];
+      arrOfSteps[0] = result;
+      arrOfSteps[1] = chooseOperation(button);
+      screen.textContent = arrOfSteps[0];
+    }
+    console.log(arrOfSteps);
+  })
+);
+
+enter.addEventListener("click", () => {
+  if (arrOfSteps.length === 3) {
+    let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
+    arrOfSteps = [];
+    arrOfSteps[0] = result;
+    screen.textContent = arrOfSteps[0];
   }
-  if (e.target.textContent === "=") {
-    if (state === "secondOperandStarted") {
-      secondOperand = screen.textContent;
-      let result =
-        "" +
-        operate(
-          Number.parseFloat(firstOperand),
-          Number.parseFloat(secondOperand),
-          operation
-        );
-      screen.textContent = result;
-      displayValue = [];
-      state = "start";
-      firstOperand = "";
-      operation = "";
-      secondOperand = "";
+  console.log(arrOfSteps);
+});
+
+clear.addEventListener("click", () => {
+  arrOfSteps = [];
+  screen.textContent = "0";
+  console.log(arrOfSteps);
+});
+
+signchange.addEventListener("click", () => {
+  if (arrOfSteps.length === 1 || arrOfSteps.length === 2) {
+    if (arrOfSteps[0][0] === "-") {
+      arrOfSteps[0] = arrOfSteps[0].slice(1);
+      screen.textContent = arrOfSteps[0];
+      console.log(arrOfSteps[0]);
+    } else {
+      arrOfSteps[0] = "-" + arrOfSteps[0];
+      screen.textContent = arrOfSteps[0];
+    }
+  } else if (arrOfSteps.length === 3) {
+    if (arrOfSteps[2][0] === "-") {
+      arrOfSteps[2] = arrOfSteps[0].slice(1);
+      screen.textContent = arrOfSteps[2];
+      console.log(arrOfSteps[2]);
+    } else {
+      arrOfSteps[2] = "-" + arrOfSteps[2];
+      screen.textContent = arrOfSteps[2];
     }
   }
 });
 
-function updateDisplayValue(symbol) {
-  if (displayValue.length <= 9) {
-    if (symbol == "." && displayValue.indexOf(symbol) != -1) {
-      return;
-    }
-    displayValue.push(symbol);
+function chooseOperation(button) {
+  switch (button.textContent) {
+    case "+":
+      return add;
+    case "-":
+      return sub;
+    case "*":
+      return mult;
+    case "/":
+      return div;
   }
 }
 
-function updateScreen(symbol) {
-  updateDisplayValue(symbol);
-  screen.textContent = displayValue.join("");
-}
-
-// math functions
+// // math functions
 
 function add(x, y) {
-  return x + y;
+  return Number.parseFloat(x) + Number.parseFloat(y);
 }
 
 function sub(x, y) {
-  return x - y;
+  return Number.parseFloat(x) - Number.parseFloat(y);
 }
 
 function mult(x, y) {
-  return x * y;
+  return Number.parseFloat(x) * Number.parseFloat(y);
 }
 
 function div(x, y) {
-  return x / y;
-}
-
-function percent(x, y) {
-  return (x / 100) * y;
+  return Number.parseFloat(x) / Number.parseFloat(y);
 }
 
 function operate(x, y, func) {
