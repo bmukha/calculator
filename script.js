@@ -7,15 +7,18 @@ const calculator = document.querySelector("#calculator");
 const screen = document.querySelector("#screen");
 calculator.addEventListener("click", (e) => {
   if (e.target.classList.contains("btn_digits")) {
-    if (state === "start" || state === "secondOperandStarted") {
-      updateDisplayValue(e.target.textContent);
-      screen.textContent = displayValue.join("");
+    if (state === "start") {
+      updateScreen(e.target.textContent);
     }
     if (state === "operationChosen") {
       displayValue = [];
       state = "secondOperandStarted";
-      updateDisplayValue(e.target.textContent);
-      screen.textContent = displayValue.join("");
+      updateScreen(e.target.textContent);
+      return;
+    }
+
+    if (state === "secondOperandStarted") {
+      updateScreen(e.target.textContent);
     }
   }
   if (e.target.classList.contains("btn_operation")) {
@@ -46,10 +49,43 @@ calculator.addEventListener("click", (e) => {
           Number.parseFloat(secondOperand),
           operation
         );
-      displayValue = result.split("");
-      firstOperand = secondOperand;
+      screen.textContent = result;
+      firstOperand = Number.parseFloat(screen.textContent);
       secondOperand = "";
+      displayValue = [];
+      switch (e.target.textContent) {
+        case "+":
+          operation = add;
+          break;
+        case "-":
+          operation = sub;
+          break;
+        case "*":
+          operation = mult;
+          break;
+        case "/":
+          operation = div;
+          break;
+      }
+      state = "operationChosen";
+    }
+  }
+  if (e.target.textContent === "=") {
+    if (state === "secondOperandStarted") {
+      secondOperand = screen.textContent;
+      let result =
+        "" +
+        operate(
+          Number.parseFloat(firstOperand),
+          Number.parseFloat(secondOperand),
+          operation
+        );
+      screen.textContent = result;
+      displayValue = [];
       state = "start";
+      firstOperand = "";
+      operation = "";
+      secondOperand = "";
     }
   }
 });
@@ -61,6 +97,11 @@ function updateDisplayValue(symbol) {
     }
     displayValue.push(symbol);
   }
+}
+
+function updateScreen(symbol) {
+  updateDisplayValue(symbol);
+  screen.textContent = displayValue.join("");
 }
 
 // math functions
