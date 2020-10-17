@@ -7,6 +7,7 @@ const enter = document.querySelector("#btn_enter");
 const clear = document.querySelector("#btn_C");
 const signchange = document.querySelector("#btn_signchange");
 const body = document.querySelector("body");
+let enterWasPressed = false;
 
 screen.textContent = "0";
 let arrOfSteps = [];
@@ -46,9 +47,14 @@ function handlingDigits(event) {
   } else if (arrOfSteps.length === 1) {
     if (arrOfSteps[0] && source === "." && arrOfSteps[0].includes(".")) {
       return;
+    } else if (enterWasPressed) {
+      arrOfSteps[0] = source;
+      screen.textContent = arrOfSteps[0];
+      enterWasPressed = false;
+    } else {
+      arrOfSteps[0] += source;
+      screen.textContent = arrOfSteps[0];
     }
-    arrOfSteps[0] += source;
-    screen.textContent = arrOfSteps[0];
   } else if (arrOfSteps.length === 2) {
     arrOfSteps.push(source);
     screen.textContent = arrOfSteps[2];
@@ -104,8 +110,9 @@ function enterHandling() {
   if (arrOfSteps.length === 3) {
     let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
     arrOfSteps = [];
-    arrOfSteps[0] = result;
+    arrOfSteps[0] = "" + result;
     screen.textContent = arrOfSteps[0];
+    enterWasPressed = true;
   }
   console.log(arrOfSteps);
 }
