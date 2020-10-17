@@ -14,6 +14,7 @@ screen.textContent = "0";
 // event listeners
 
 document.addEventListener("keyup", (event) => {
+  event.stopPropagation();
   if ((+event.key >= 0 && +event.key <= 9) || event.key === ".") {
     handlingDigits(event);
   } else if (
