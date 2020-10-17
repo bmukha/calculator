@@ -91,7 +91,10 @@ function handlingDigits(event) {
     arrOfSteps.push(source);
     screen.textContent = arrOfSteps[0];
   } else if (arrOfSteps.length === 1) {
-    if ((arrOfSteps[0] && source === "." && arrOfSteps[0].includes(".")) || arrOfSteps[0].length > 8) {
+    if (
+      (arrOfSteps[0] && source === "." && arrOfSteps[0].includes(".")) ||
+      arrOfSteps[0].length > 8
+    ) {
       return;
     } else if (enterWasPressed) {
       arrOfSteps[0] = source;
@@ -105,14 +108,15 @@ function handlingDigits(event) {
     arrOfSteps.push(source);
     screen.textContent = arrOfSteps[2];
   } else if (arrOfSteps.length === 3) {
-    if ((arrOfSteps[2] && source === "." && arrOfSteps[2].includes(".")) || arrOfSteps[2].length > 8) {
+    if (
+      (arrOfSteps[2] && source === "." && arrOfSteps[2].includes(".")) ||
+      arrOfSteps[2].length > 8
+    ) {
       return;
     }
     arrOfSteps[2] += source;
     screen.textContent = arrOfSteps[2];
   }
-  console.log(`${handlingDigits.name} called with code ${source}`);
-  console.log(arrOfSteps);
 }
 
 function operationsHandling(event) {
@@ -136,28 +140,33 @@ function operationsHandling(event) {
     arrOfSteps[1] = chooseOperation(source);
     screen.textContent = arrOfSteps[0];
   }
-  console.log(`${operationsHandling.name} called`);
-  console.log(arrOfSteps);
 }
 
 function enterHandling() {
   if (arrOfSteps.length === 3) {
-    let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
-    arrOfSteps = [];
-    arrOfSteps[0] = "" + result;
-    screen.textContent = arrOfSteps[0];
-    enterWasPressed = true;
+    if (arrOfSteps[2] === "0") {
+      body.innerHTML = `<img src="./pics/divideByZero.png" alt="You broke it all!!!">`;
+      setTimeout(() => {
+        document.location.reload();
+      }, 5000);
+    } else {
+      let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
+      arrOfSteps = [];
+      if (result.length > 9) {
+        screen.textContent = "can't handle it";
+      } else {
+        arrOfSteps[0] = "" + result;
+        screen.textContent = arrOfSteps[0];
+        enterWasPressed = true;
+      }
+    }
   }
-  console.log(`${enterHandling.name} called`);
-  console.log(arrOfSteps);
 }
 
 function clearHandling() {
   arrOfSteps = [];
   screen.textContent = "0";
   enterWasPressed = false;
-  console.log(`${clearHandling.name} called`);
-  console.log(arrOfSteps);
 }
 
 function backHandling() {
@@ -184,8 +193,6 @@ function backHandling() {
       arrOfSteps[2] = "0";
     }
   }
-  console.log(`${backHandling.name} called`);
-  console.log(arrOfSteps);
 }
 
 function chooseOperation(button) {
@@ -199,8 +206,6 @@ function chooseOperation(button) {
     case "/":
       return div;
   }
-  console.log(`${chooseOperation.name} called`);
-  console.log(arrOfSteps);
 }
 
 // math functions
@@ -222,13 +227,5 @@ function div(x, y) {
 }
 
 function operate(x, y, func) {
-  let result = Math.round(func(x, y) * 10000000000) / 10000000000;
-  if (result === Infinity || result === -Infinity) {
-    body.innerHTML = `<img src="./pics/divideByZero.png" alt="You broke it all!!!">`;
-    setTimeout(() => {
-      document.location.reload();
-    }, 5000);
-    return;
-  }
-  return "" + result;
+  return "" + Math.round(func(x, y) * 10000000000) / 10000000000;
 }
