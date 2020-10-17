@@ -110,6 +110,7 @@ function handlingDigits(event) {
     arrOfSteps[2] += source;
     screen.textContent = arrOfSteps[2];
   }
+  // console.log(arrOfSteps);
 }
 
 function handlingOperations(event) {
@@ -132,6 +133,7 @@ function handlingOperations(event) {
     arrOfSteps[1] = chooseOperation(source);
     screen.textContent = arrOfSteps[0];
   }
+  // console.log(arrOfSteps);
 }
 
 function enterHandling() {
@@ -142,11 +144,14 @@ function enterHandling() {
     screen.textContent = arrOfSteps[0];
     enterWasPressed = true;
   }
+  // console.log(arrOfSteps);
 }
 
 function clearHandling() {
   arrOfSteps = [];
   screen.textContent = "0";
+  enterWasPressed = false;
+  // console.log(arrOfSteps);
 }
 
 function backHandling() {
@@ -173,6 +178,7 @@ function backHandling() {
       arrOfSteps[2] = "0";
     }
   }
+  // console.log(arrOfSteps);
 }
 
 function chooseOperation(button) {
@@ -186,6 +192,7 @@ function chooseOperation(button) {
     case "/":
       return div;
   }
+  // console.log(arrOfSteps);
 }
 
 // math functions
@@ -215,5 +222,5 @@ function operate(x, y, func) {
     }, 5000);
     return;
   }
-  return result;
+  return "" + result;
 }
