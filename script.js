@@ -45,7 +45,7 @@ function handlingDigits(event) {
     arrOfSteps.push(source);
     screen.textContent = arrOfSteps[0];
   } else if (arrOfSteps.length === 1) {
-    if (arrOfSteps[0] && source === "." && arrOfSteps[0].includes(".")) {
+    if ((arrOfSteps[0] && source === "." && arrOfSteps[0].includes(".")) || arrOfSteps[0].length > 8) {
       return;
     } else if (enterWasPressed) {
       arrOfSteps[0] = source;
@@ -59,7 +59,7 @@ function handlingDigits(event) {
     arrOfSteps.push(source);
     screen.textContent = arrOfSteps[2];
   } else if (arrOfSteps.length === 3) {
-    if (arrOfSteps[2] && source === "." && arrOfSteps[2].includes(".")) {
+    if ((arrOfSteps[2] && source === "." && arrOfSteps[2].includes(".")) || arrOfSteps[2].length > 8) {
       return;
     }
     arrOfSteps[2] += source;
