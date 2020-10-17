@@ -41,7 +41,7 @@ img {
     "zero zero dot enter";
 }
 
-#calculator > div {
+#calculator > button, #calculator > div{
     display: inline-block;
     border: 1px solid black;
     background-color:rgba(255, 0, 0, 0.5);
@@ -61,16 +61,16 @@ img {
     background-color: #fff;
 }
 
-#calculator > div.button {
+#calculator > button.button {
     background-color: rgba(0, 0, 255, 0.5);
 }
 
-#calculator > div.button:hover {
+#calculator > button.button:hover {
     transform: scale(1.02);
     cursor: pointer;
 }
 
-#calculator > div.btn_operation {
+#calculator > button.btn_operation {
     background-color: rgba(0, 255, 0, 0.5);
 }
 

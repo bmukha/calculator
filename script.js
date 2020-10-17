@@ -11,59 +11,96 @@ const body = document.querySelector("body");
 screen.textContent = "0";
 let arrOfSteps = [];
 
-digitButtons.forEach((button) =>
-  button.addEventListener("click", () => {
-    if (arrOfSteps.length === 0) {
-      arrOfSteps.push(button.textContent);
-      screen.textContent = arrOfSteps[0];
-    } else if (arrOfSteps.length === 1) {
-      if (
-        arrOfSteps[0] &&
-        button.textContent === "." &&
-        arrOfSteps[0].includes(".")
-      ) {
-        return;
-      }
-      arrOfSteps[0] += button.textContent;
-      screen.textContent = arrOfSteps[0];
-    } else if (arrOfSteps.length === 2) {
-      arrOfSteps.push(button.textContent);
-      screen.textContent = arrOfSteps[2];
-    } else if (arrOfSteps.length === 3) {
-      if (
-        arrOfSteps[2] &&
-        button.textContent === "." &&
-        arrOfSteps[2].includes(".")
-      ) {
-        return;
-      }
-      arrOfSteps[2] += button.textContent;
-      screen.textContent = arrOfSteps[2];
+document.addEventListener("keyup", (event) => {
+  if ((+event.key >= 0 && +event.key <= 9) || event.key === ".") {
+    handlingDigits(event);
+  } else if (
+    event.key === "/" ||
+    event.key === "*" ||
+    event.key === "+" ||
+    event.key === "-"
+  ) {
+    handlingOperations(event);
+  } else if (event.key === "Enter") {
+    enterHandling();
+  } else if (event.key === "Escape") {
+    clearHandling();
+  } else if (event.key === "Backspace") {
+    backHandling();
+  } else {
+    console.log(event.key);
+  }
+});
+
+function handlingDigits(event) {
+  let source;
+  if (event.type === "click") {
+    source = event.target.textContent;
+  } else if (event.type === "keyup") {
+    source = event.key;
+  }
+
+  if (arrOfSteps.length === 0) {
+    arrOfSteps.push(source);
+    screen.textContent = arrOfSteps[0];
+  } else if (arrOfSteps.length === 1) {
+    if (arrOfSteps[0] && source === "." && arrOfSteps[0].includes(".")) {
+      return;
     }
-    console.log(arrOfSteps);
-  })
+    arrOfSteps[0] += source;
+    screen.textContent = arrOfSteps[0];
+  } else if (arrOfSteps.length === 2) {
+    arrOfSteps.push(source);
+    screen.textContent = arrOfSteps[2];
+  } else if (arrOfSteps.length === 3) {
+    if (arrOfSteps[2] && source === "." && arrOfSteps[2].includes(".")) {
+      return;
+    }
+    arrOfSteps[2] += source;
+    screen.textContent = arrOfSteps[2];
+  }
+  console.log(arrOfSteps);
+}
+
+digitButtons.forEach((button) =>
+  button.addEventListener("click", (event) => handlingDigits(event))
 );
+
+function handlingOperations(event) {
+  let source;
+  if (event.type === "click") {
+    source = event.target.textContent;
+  } else if (event.type === "keyup") {
+    source = event.key;
+  }
+  console.log(source);
+  if (arrOfSteps.length === 0) {
+    arrOfSteps.push("0", chooseOperation(source));
+  } else if (arrOfSteps.length === 1) {
+    arrOfSteps.push(chooseOperation(source));
+  } else if (arrOfSteps.length === 2) {
+    arrOfSteps[1] = chooseOperation(source);
+  } else if (arrOfSteps.length === 3) {
+    let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
+    arrOfSteps = [];
+    arrOfSteps[0] = result;
+    arrOfSteps[1] = chooseOperation(source);
+    screen.textContent = arrOfSteps[0];
+  }
+  console.log(arrOfSteps);
+}
 
 operations.forEach((button) =>
-  button.addEventListener("click", () => {
-    if (arrOfSteps.length === 0) {
-      arrOfSteps.push("0", chooseOperation(button));
-    } else if (arrOfSteps.length === 1) {
-      arrOfSteps.push(chooseOperation(button));
-    } else if (arrOfSteps.length === 2) {
-      arrOfSteps[1] = chooseOperation(button);
-    } else if (arrOfSteps.length === 3) {
-      let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
-      arrOfSteps = [];
-      arrOfSteps[0] = result;
-      arrOfSteps[1] = chooseOperation(button);
-      screen.textContent = arrOfSteps[0];
-    }
-    console.log(arrOfSteps);
+  button.addEventListener("click", (event) => {
+    handlingOperations(event);
   })
 );
 
-enter.addEventListener("click", () => {
+enter.addEventListener("click", (event) => {
+  enterHandling(event);
+});
+
+function enterHandling() {
   if (arrOfSteps.length === 3) {
     let result = operate(arrOfSteps[0], arrOfSteps[2], arrOfSteps[1]);
     arrOfSteps = [];
@@ -71,13 +108,17 @@ enter.addEventListener("click", () => {
     screen.textContent = arrOfSteps[0];
   }
   console.log(arrOfSteps);
-});
+}
 
 clear.addEventListener("click", () => {
+  clearHandling();
+});
+
+function clearHandling() {
   arrOfSteps = [];
   screen.textContent = "0";
   console.log(arrOfSteps);
-});
+}
 
 signchange.addEventListener("click", () => {
   if (arrOfSteps.length === 1 || arrOfSteps.length === 2) {
@@ -102,6 +143,10 @@ signchange.addEventListener("click", () => {
 });
 
 back.addEventListener("click", () => {
+  backHandling();
+});
+
+function backHandling() {
   if (arrOfSteps.length === 1) {
     if (screen.textContent.length > 1) {
       screen.textContent = screen.textContent.substring(
@@ -126,10 +171,10 @@ back.addEventListener("click", () => {
     }
     console.log(arrOfSteps);
   }
-});
+}
 
 function chooseOperation(button) {
-  switch (button.textContent) {
+  switch (button) {
     case "+":
       return add;
     case "-":
@@ -162,7 +207,6 @@ function div(x, y) {
 function operate(x, y, func) {
   let result = Math.round(func(x, y) * 10000000000) / 10000000000;
   if (result === Infinity || result === -Infinity) {
-    let oldHTML = body.innerHTML;
     body.innerHTML = `<img src="./pics/divideByZero.png" alt="You broke it all!!!">`;
     setTimeout(() => {
       document.location.reload();
