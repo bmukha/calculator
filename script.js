@@ -6,6 +6,7 @@ const back = document.querySelector("#btn_back");
 const enter = document.querySelector("#btn_enter");
 const clear = document.querySelector("#btn_C");
 const signchange = document.querySelector("#btn_signchange");
+const body = document.querySelector("body");
 
 screen.textContent = "0";
 let arrOfSteps = [];
@@ -140,7 +141,7 @@ function chooseOperation(button) {
   }
 }
 
-// // math functions
+// math functions
 
 function add(x, y) {
   return Number.parseFloat(x) + Number.parseFloat(y);
@@ -159,5 +160,14 @@ function div(x, y) {
 }
 
 function operate(x, y, func) {
-  return Math.round(func(x, y) * 10000000000) / 10000000000;
+  let result = Math.round(func(x, y) * 10000000000) / 10000000000;
+  if (result === Infinity || result === -Infinity) {
+    let oldHTML = body.innerHTML;
+    body.innerHTML = `<img src="./pics/divideByZero.png" alt="You broke it all!!!">`;
+    setTimeout(() => {
+      document.location.reload();
+    }, 5000);
+    return;
+  }
+  return result;
 }
