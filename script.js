@@ -16,7 +16,11 @@ digitButtons.forEach((button) =>
       arrOfSteps.push(button.textContent);
       screen.textContent = arrOfSteps[0];
     } else if (arrOfSteps.length === 1) {
-      if (arrOfSteps[0] && arrOfSteps[0].includes(".") && button.textContent === ".") {
+      if (
+        arrOfSteps[0] &&
+        button.textContent === "." &&
+        arrOfSteps[0].includes(".")
+      ) {
         return;
       }
       arrOfSteps[0] += button.textContent;
@@ -25,7 +29,11 @@ digitButtons.forEach((button) =>
       arrOfSteps.push(button.textContent);
       screen.textContent = arrOfSteps[2];
     } else if (arrOfSteps.length === 3) {
-      if (arrOfSteps[2] && arrOfSteps[2].includes(".") && button.textContent === ".") {
+      if (
+        arrOfSteps[2] &&
+        button.textContent === "." &&
+        arrOfSteps[2].includes(".")
+      ) {
         return;
       }
       arrOfSteps[2] += button.textContent;
@@ -92,6 +100,33 @@ signchange.addEventListener("click", () => {
   }
 });
 
+back.addEventListener("click", () => {
+  if (arrOfSteps.length === 1) {
+    if (screen.textContent.length > 1) {
+      screen.textContent = screen.textContent.substring(
+        0,
+        screen.textContent.length - 1
+      );
+      arrOfSteps[0] = screen.textContent;
+    } else if (screen.textContent.length === 1) {
+      screen.textContent = "0";
+      arrOfSteps[0] = "0";
+    }
+  } else if (arrOfSteps.length === 3) {
+    if (screen.textContent.length > 1) {
+      screen.textContent = screen.textContent.substring(
+        0,
+        screen.textContent.length - 1
+      );
+      arrOfSteps[2] = screen.textContent;
+    } else if (screen.textContent.length === 1) {
+      screen.textContent = "0";
+      arrOfSteps[2] = "0";
+    }
+    console.log(arrOfSteps);
+  }
+});
+
 function chooseOperation(button) {
   switch (button.textContent) {
     case "+":
@@ -124,5 +159,5 @@ function div(x, y) {
 }
 
 function operate(x, y, func) {
-  return func(x, y);
+  return Math.round(func(x, y) * 10000000000) / 10000000000;
 }
