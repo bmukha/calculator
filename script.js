@@ -23,7 +23,7 @@ document.addEventListener("keyup", (event) => {
     event.key === "+" ||
     event.key === "-"
   ) {
-    handlingOperations(event);
+    operationsHandling(event);
   } else if (event.key === "Enter") {
     enterHandling();
   } else if (event.key === "Escape") {
@@ -41,7 +41,7 @@ digitButtons.forEach((button) =>
 
 operations.forEach((button) =>
   button.addEventListener("click", (event) => {
-    handlingOperations(event);
+    operationsHandling(event);
   })
 );
 
@@ -111,10 +111,13 @@ function handlingDigits(event) {
     arrOfSteps[2] += source;
     screen.textContent = arrOfSteps[2];
   }
+  console.log(`${handlingDigits.name} called with code ${source}`);
+  console.log(arrOfSteps);
 }
 
-function handlingOperations(event) {
+function operationsHandling(event) {
   let source;
+  enterWasPressed = false;
   if (event.type === "click") {
     source = event.target.textContent;
   } else if (event.type === "keyup") {
@@ -133,6 +136,8 @@ function handlingOperations(event) {
     arrOfSteps[1] = chooseOperation(source);
     screen.textContent = arrOfSteps[0];
   }
+  console.log(`${operationsHandling.name} called`);
+  console.log(arrOfSteps);
 }
 
 function enterHandling() {
@@ -143,12 +148,16 @@ function enterHandling() {
     screen.textContent = arrOfSteps[0];
     enterWasPressed = true;
   }
+  console.log(`${enterHandling.name} called`);
+  console.log(arrOfSteps);
 }
 
 function clearHandling() {
   arrOfSteps = [];
   screen.textContent = "0";
   enterWasPressed = false;
+  console.log(`${clearHandling.name} called`);
+  console.log(arrOfSteps);
 }
 
 function backHandling() {
@@ -175,6 +184,8 @@ function backHandling() {
       arrOfSteps[2] = "0";
     }
   }
+  console.log(`${backHandling.name} called`);
+  console.log(arrOfSteps);
 }
 
 function chooseOperation(button) {
@@ -188,6 +199,8 @@ function chooseOperation(button) {
     case "/":
       return div;
   }
+  console.log(`${chooseOperation.name} called`);
+  console.log(arrOfSteps);
 }
 
 // math functions
