@@ -8,9 +8,10 @@ const clear = document.querySelector("#btn_C");
 const signchange = document.querySelector("#btn_signchange");
 const body = document.querySelector("body");
 let enterWasPressed = false;
-
-screen.textContent = "0";
 let arrOfSteps = [];
+screen.textContent = "0";
+
+// event listeners
 
 document.addEventListener("keyup", (event) => {
   if ((+event.key >= 0 && +event.key <= 9) || event.key === ".") {
@@ -29,9 +30,53 @@ document.addEventListener("keyup", (event) => {
   } else if (event.key === "Backspace") {
     backHandling();
   } else {
-    console.log(event.key);
+    return;
   }
 });
+
+digitButtons.forEach((button) =>
+  button.addEventListener("click", (event) => handlingDigits(event))
+);
+
+operations.forEach((button) =>
+  button.addEventListener("click", (event) => {
+    handlingOperations(event);
+  })
+);
+
+enter.addEventListener("click", (event) => {
+  enterHandling(event);
+});
+
+clear.addEventListener("click", () => {
+  clearHandling();
+});
+
+signchange.addEventListener("click", () => {
+  if (arrOfSteps.length === 1 || arrOfSteps.length === 2) {
+    if (arrOfSteps[0][0] === "-") {
+      arrOfSteps[0] = arrOfSteps[0].slice(1);
+      screen.textContent = arrOfSteps[0];
+    } else {
+      arrOfSteps[0] = "-" + arrOfSteps[0];
+      screen.textContent = arrOfSteps[0];
+    }
+  } else if (arrOfSteps.length === 3) {
+    if (arrOfSteps[2][0] === "-") {
+      arrOfSteps[2] = arrOfSteps[0].slice(1);
+      screen.textContent = arrOfSteps[2];
+    } else {
+      arrOfSteps[2] = "-" + arrOfSteps[2];
+      screen.textContent = arrOfSteps[2];
+    }
+  }
+});
+
+back.addEventListener("click", () => {
+  backHandling();
+});
+
+// input handling functions
 
 function handlingDigits(event) {
   let source;
@@ -65,12 +110,7 @@ function handlingDigits(event) {
     arrOfSteps[2] += source;
     screen.textContent = arrOfSteps[2];
   }
-  console.log(arrOfSteps);
 }
-
-digitButtons.forEach((button) =>
-  button.addEventListener("click", (event) => handlingDigits(event))
-);
 
 function handlingOperations(event) {
   let source;
@@ -79,7 +119,6 @@ function handlingOperations(event) {
   } else if (event.type === "keyup") {
     source = event.key;
   }
-  console.log(source);
   if (arrOfSteps.length === 0) {
     arrOfSteps.push("0", chooseOperation(source));
   } else if (arrOfSteps.length === 1) {
@@ -93,18 +132,7 @@ function handlingOperations(event) {
     arrOfSteps[1] = chooseOperation(source);
     screen.textContent = arrOfSteps[0];
   }
-  console.log(arrOfSteps);
 }
-
-operations.forEach((button) =>
-  button.addEventListener("click", (event) => {
-    handlingOperations(event);
-  })
-);
-
-enter.addEventListener("click", (event) => {
-  enterHandling(event);
-});
 
 function enterHandling() {
   if (arrOfSteps.length === 3) {
@@ -114,44 +142,12 @@ function enterHandling() {
     screen.textContent = arrOfSteps[0];
     enterWasPressed = true;
   }
-  console.log(arrOfSteps);
 }
-
-clear.addEventListener("click", () => {
-  clearHandling();
-});
 
 function clearHandling() {
   arrOfSteps = [];
   screen.textContent = "0";
-  console.log(arrOfSteps);
 }
-
-signchange.addEventListener("click", () => {
-  if (arrOfSteps.length === 1 || arrOfSteps.length === 2) {
-    if (arrOfSteps[0][0] === "-") {
-      arrOfSteps[0] = arrOfSteps[0].slice(1);
-      screen.textContent = arrOfSteps[0];
-      console.log(arrOfSteps[0]);
-    } else {
-      arrOfSteps[0] = "-" + arrOfSteps[0];
-      screen.textContent = arrOfSteps[0];
-    }
-  } else if (arrOfSteps.length === 3) {
-    if (arrOfSteps[2][0] === "-") {
-      arrOfSteps[2] = arrOfSteps[0].slice(1);
-      screen.textContent = arrOfSteps[2];
-      console.log(arrOfSteps[2]);
-    } else {
-      arrOfSteps[2] = "-" + arrOfSteps[2];
-      screen.textContent = arrOfSteps[2];
-    }
-  }
-});
-
-back.addEventListener("click", () => {
-  backHandling();
-});
 
 function backHandling() {
   if (arrOfSteps.length === 1) {
@@ -176,7 +172,6 @@ function backHandling() {
       screen.textContent = "0";
       arrOfSteps[2] = "0";
     }
-    console.log(arrOfSteps);
   }
 }
 
